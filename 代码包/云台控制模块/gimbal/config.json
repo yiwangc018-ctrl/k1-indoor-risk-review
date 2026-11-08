@@ -1,0 +1,24 @@
+{
+  "bus": 4,
+  "address": 64,
+  "pwm_hz": 50,
+  "pan": {
+    "channel": 15,
+    "initial_us": 512.7,
+    "targets_us": [
+      994.4,
+      1488.9,
+      1983.3,
+      2477.8
+    ],
+    "min_us": 500.0,
+    "max_us": 2478.0
+  },
+  "tilt": {
+    "channel": 11,
+    "initial_us": 2055.7,
+    "up_us": 2240.7,
+    "min_us": 500.0,
+    "max_us": 2241.2
+  }
+}

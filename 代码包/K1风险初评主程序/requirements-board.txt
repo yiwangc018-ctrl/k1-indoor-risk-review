@@ -1,0 +1,3 @@
+# K1 / Bianbu / Python 3.12；onnxruntime 使用 apt 的 python3-spacemit-ort。
+numpy>=1.24
+Pillow>=10.0

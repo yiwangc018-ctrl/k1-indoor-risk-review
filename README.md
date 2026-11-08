@@ -1,145 +1,26 @@
-# 室内环境风险初评终端（K1 MUSE Pi Pro）
+# K1 室内环境风险初评：源码与开发文档
 
-面向居家、宿舍和办公桌面的本地多模态终端。说一句"可以开始了"，K1 板端用 SenseVoice 做本地语音识别，
-再驱动 USB 摄像头拍照，Qwen3.5-0.8B 逐张给出低/中/高关注程度和问题点，板端写出事实文件；
-PC 端把照片、评估与问题点汇总成一份自包含的 HTML 报告。全程本地推理，不调用云端接口。
+当前正式源码按模块放在 [代码包/](代码包/README.md)。主链路为语音触发、云台四角度拍摄、0.8B 视觉粗评与报告生成。
 
-- 平台：K1 MUSE Pi Pro / Bianbu 2.3.5 / riscv64 / Python 3.12
-- 模型：SenseVoice（ASR）+ Qwen3.5-0.8B（视觉语言，224 输入）
-- 外设：UGREEN 1080P USB 摄像头、USB 麦克风、PCA9685 二轴云台、USB 音箱
-- 输出：板端 `analysis.json` / `meta.json` / `report.md`，PC 端 `report.html`
-
-关注程度只表示"先处理哪个区域"的优先级，不是事故概率或安全认证；评估范围只限本轮照片可见区域。
-
-## 目录
-
-```text
-app/        板端应用：采集、VLM 分析、报告、云台流程、ASR 客户端、买家版报告
-configs/    运行配置与 0.8B 提示词、响应 schema
-gimbal/     PCA9685 / MPU6050 / 云台控制包
-scripts/    板端启动与恢复、PC 部署 / 同步 / 验收
-tests/      PC 单测（unittest，不接板）
-```
-
-## 硬件与系统
-
-| 项 | 要求 | 说明 |
-|---|---|---|
-| 板卡 | K1 MUSE Pi Pro（进迭时空），内存 ≥ 8GB | 实测 15–16GiB；0.8B 模型加载需要 ≥7.5GB 可用内存 |
-| 系统 | Bianbu 2.3.5 LXQt / riscv64 / Python 3.12.3 / kernel 6.6.63 | 不要换板型镜像，复现前也别升级 Bianbu 大版本 |
-| 用户 | `biandu`，家目录 `/home/biandu` | 脚本默认写死这个路径；其他用户用 `new_board_bringup.py --allow-other-home` |
-| 摄像头 | 免驱 UVC 1080P（项目用的是 UGREEN） | 板端走 V4L2，`/dev/video*` 要可读写 |
-| 云台 | PCA9685 二轴（i2c-4，地址 0x40）：pan=CH15、tilt=CH11 | 初始姿态 CH15 512.7µs / CH11 2055.7µs；旧文档写的 CH0/CH1 会清零 PCA |
-| 麦克风 / 音箱 | USB 麦克风 + USB 音箱（Jieli 4c4a:4155） | 音箱缺失时入口自动加 `--no-cue --wait-enter`，按回车后再说"可以开始了" |
-
-云台需要 i2c 权限：`biandu` 加入 `i2c` 组，`/dev/i2c-3`、`/dev/i2c-4` 可读写（`/dev/i2c-3` 接 MPU6050，可选）。
-
-## 依赖与模型权重
-
-PC 侧：
+| 入口 | 内容 |
+|---|---|
+| [K1风险初评主程序](代码包/K1风险初评主程序/) | 语音、相机、视觉分析、配置和测试 |
+| [云台控制模块](代码包/云台控制模块/) | 四角采集编排、I2C/PCA9685、有效硬件配置和测试 |
+| [PC端部署与报告工具](代码包/PC端部署与报告工具/) | 部署、同步、验收、HTML/润色工具和测试 |
+| [开发文档与使用入口](代码包/README.md) | 六份开发说明、运行依赖和构建命令 |
+| [历史归档](历史归档/README.md) | 停用入口、模型对照、训练和早期实验，均不参与正式组装 |
 
 ```bash
-pip install -r requirements-pc.txt          # paramiko / Pillow / numpy
+python 代码包/管理代码包.py check
+python 代码包/管理代码包.py build
+python 代码包/管理代码包.py test
+python 代码包/管理代码包.py zip
 ```
 
-板端：
+组装结果在 `dist/运行目录/`，仍使用板端熟悉的 app/configs/scripts/gimbal 相对路径；
+分模块目录是唯一源码，不维护第二套运行副本。GitHub 不保存生成目录、权重、私钥或现场照片。
 
-```bash
-pip install -r requirements-board.txt       # numpy / Pillow / PyYAML
-sudo apt install python3-spacemit-ort       # onnxruntime，Bianbu 上优先用 apt
-```
+等级只表示本轮可见区域的整理优先程度，不是事故概率、安全认证或全屋覆盖。
+本轮完成代码整理和离线验证，未在 K1 上重新验收；现有板端文件不受本次仓库整理影响。
 
-模型权重不进仓库（`*.gguf`、`*.onnx` 被 `.gitignore` 排除），需要自己下载并按下面的路径放置。
-路径在 `configs/room_review_k1.json` 和 `scripts/board/ensure_room_vlm.sh` 里写死，改了要同步改配置。
-
-| 模型 | 下载地址 | 大小 / sha256 | 放置路径 |
-|---|---|---|---|
-| Qwen3.5-0.8B（文本 GGUF + 224/384/768 视觉 ONNX） | `http://archive.spacemit.com/spacemit-ai/model_zoo/vlm/Qwen3.5-0.8B.tar.gz` | 977,343,463 B（约 977MB）；sha256 `be44a9d2350c0668bbd830cf79d48c6a1ce5d691bb3c6e8e702dcb58a994d2ca` | 解压到 `~/.cache/models/vlm/`，得到 `~/.cache/models/vlm/Qwen3.5-0.8B/` |
-| SenseVoice（ASR） | `https://archive.spacemit.com/spacemit-ai/openwebui/sensevoice.tar.gz` | 446,692,718 B；其中 `model_quant_optimized.onnx` 约 240MB；sha256 `3e54c9cb42beef5d37dc38c3cc87248ee6e9615d143112e0fd8afd5b6c73ff35` | 解压到 `~/rv/asr/sensevoice/`，得到 `~/rv/asr/sensevoice/sensevoice/` |
-
-不想手动下载可以直接跑，脚本会下载并校验 sha256：
-
-```bash
-cd /home/biandu/rv/room_review
-python3 scripts/board/new_board_bringup.py install --only models
-# 已有离线包：加 --models-dir <目录>；完全离线：加 --offline
-```
-
-另外还需要 llama.cpp 0.1.7 和 spacemit-ort 2.0.6，由 `scripts/board/ensure_room_vlm.sh`
-拉起常驻的 VLM 服务（端口 8099），避免每次分析都付十几秒冷启动。权重按各自的原始许可证使用，仓库不分发。
-
-## 板端运行
-
-```bash
-ssh biandu@k1.local
-cd /home/biandu/rv/room_review
-bash scripts/board/start_room_review.sh
-```
-
-菜单：
-
-1. 单张拍照 → 0.8B → 报告
-2. 手动换方向拍四张 → 分析
-3. 语音触发 → 单张拍照
-4. 处理待分析轮次
-5. 语音测试（文字提示 + 回车）
-6. 旧云台四角入口，走 `Gimbal/Hardware`，会清零 PCA，已停用
-7. 30 秒流程入口：提示语 + 嘀一声 → 四角度拍照与分析（`scripts/board/voice_gimbal30.sh`）
-8. 完整检查（无提示音），音箱不可用时用
-9. 恢复云台初始姿态，板子重启后 PCA 被清零时先托住相机再跑
-
-也可以直接调用：
-
-```bash
-python3 app/room_review.py capture             # 单张
-python3 app/room_review.py watch               # 处理 READY 轮次
-python3 app/room_review.py audio-check --play  # 音箱自检
-python3 app/room_review.py voice               # 语音触发
-```
-
-## PC 端生成报告
-
-```bash
-# 取回板端轮次
-python scripts/pc/sync_room_review.py --host k1.local --out results/room_review_<日期>/board
-
-# 冻结事实，生成 polish/facts.json 与 facts.sha256
-python app/polish_packet.py build <round_dir> <round_dir>/polish
-
-# 润色：没有模型时用确定性模板，也可以接 OpenAI 兼容服务
-python app/polish_report.py template <round_dir>/polish
-
-# 生成自包含的买家版 HTML
-python app/buyer_report.py <round_dir>
-```
-
-输出是 `<round_dir>/report.html`。事实锁校验不通过时脚本会直接报错，不要绕过。
-
-`scripts/pc/watch_report_to_desktop.py` 可以轮询板端轮次，把新生成的 `report.html` 自动复制到 Windows 桌面，
-日志在 `%LOCALAPPDATA%\K1ReportWatcher\watcher.log`。
-
-## 测试
-
-```bash
-python -m unittest discover -s tests
-```
-
-PC 侧 311 项用例，不需要板卡、摄像头、云台或权重。覆盖照片处理与旋转、VLM 输出契约与提示词、
-风险等级汇总、报告事实锁与买家版 HTML、云台 30 秒流程的时序计算、轮次状态机、PCA9685 驱动、
-提示音与语音模块、离线包与部署脚本的纯函数部分。真实拍照、ASR/VLM 实际耗时、舵机转位、
-音箱放音这些必须有板卡才能验。
-
-## 已知限制
-
-- 云台拍照闭环只在 17:36 那一轮人工确认通过。旧入口 `gimbal_scan.py` 用 CH0/CH1 且会清零 PCA，不要用它跑新流程。
-- 风险等级只在单个场景上跑过，没有真值，也没有统计准确率，不宣称 ≥90%。
-- AI 核与 CPU 占用未测。
-- 断电、摄像头断连、舵机异常恢复未验收，只验证过 VNC 重启后的自恢复。
-- 四角覆盖约 0–267°，不是全屋覆盖。
-- 相机默认 `rotate=0`；最早那个 16:50 的轮次误转了 180°，作为失败记录保留。
-- USB 音箱掉线时入口会退回板载输出；板载也不可用就用菜单 8，按回车后再说"可以开始了"。
-- 桌面双击 `.desktop` 仍会报"需要文件管理器服务"，用"所有应用程序"或终端入口。
-
-## 许可证
-
-MIT，见 [LICENSE](LICENSE)。
+项目源码采用 [MIT LICENSE](LICENSE)。第三方组件与模型许可见 [开源组件与模型说明](代码包/开源组件与模型说明.md)。
