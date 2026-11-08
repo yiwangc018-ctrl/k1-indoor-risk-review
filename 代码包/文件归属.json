@@ -1,0 +1,858 @@
+{
+  "version": 1,
+  "baseline_commit": "2980272",
+  "files": [
+    {
+      "source": "K1风险初评主程序/app/asr_client.py",
+      "runtime": "app/asr_client.py",
+      "origin": "app/asr_client.py"
+    },
+    {
+      "source": "K1风险初评主程序/app/asr_sensevoice.py",
+      "runtime": "app/asr_sensevoice.py",
+      "origin": "app/asr_sensevoice.py"
+    },
+    {
+      "source": "PC端部署与报告工具/app/buyer_report.py",
+      "runtime": "app/buyer_report.py",
+      "origin": "app/buyer_report.py"
+    },
+    {
+      "source": "云台控制模块/app/gimbal_flow30.py",
+      "runtime": "app/gimbal_flow30.py",
+      "origin": "app/gimbal_flow30.py"
+    },
+    {
+      "source": "K1风险初评主程序/app/photo_pipeline.py",
+      "runtime": "app/photo_pipeline.py",
+      "origin": "app/photo_pipeline.py"
+    },
+    {
+      "source": "PC端部署与报告工具/app/polish_packet.py",
+      "runtime": "app/polish_packet.py",
+      "origin": "app/polish_packet.py"
+    },
+    {
+      "source": "PC端部署与报告工具/app/polish_report.py",
+      "runtime": "app/polish_report.py",
+      "origin": "app/polish_report.py"
+    },
+    {
+      "source": "K1风险初评主程序/app/room_review.py",
+      "runtime": "app/room_review.py",
+      "origin": "app/room_review.py"
+    },
+    {
+      "source": "K1风险初评主程序/configs/risk_assessment_v1_08b/system_prompt.zh.txt",
+      "runtime": "configs/risk_assessment_v1_08b/system_prompt.zh.txt",
+      "origin": "configs/risk_assessment_v1_08b/system_prompt.zh.txt"
+    },
+    {
+      "source": "K1风险初评主程序/configs/risk_assessment_v1_08b/view_prompt.zh.txt",
+      "runtime": "configs/risk_assessment_v1_08b/view_prompt.zh.txt",
+      "origin": "configs/risk_assessment_v1_08b/view_prompt.zh.txt"
+    },
+    {
+      "source": "K1风险初评主程序/configs/risk_assessment_v1_08b/view_response.schema.json",
+      "runtime": "configs/risk_assessment_v1_08b/view_response.schema.json",
+      "origin": "configs/risk_assessment_v1_08b/view_response.schema.json"
+    },
+    {
+      "source": "K1风险初评主程序/configs/room_review_k1.json",
+      "runtime": "configs/room_review_k1.json",
+      "origin": "configs/room_review_k1.json"
+    },
+    {
+      "source": "云台控制模块/gimbal/i2c.py",
+      "runtime": "gimbal/i2c.py",
+      "origin": "gimbal/i2c.py"
+    },
+    {
+      "source": "云台控制模块/gimbal/pca9685.py",
+      "runtime": "gimbal/pca9685.py",
+      "origin": "gimbal/pca9685.py"
+    },
+    {
+      "source": "K1风险初评主程序/requirements-board.txt",
+      "runtime": "requirements-board.txt",
+      "origin": "requirements-board.txt"
+    },
+    {
+      "source": "PC端部署与报告工具/requirements-pc.txt",
+      "runtime": "requirements-pc.txt",
+      "origin": "requirements-pc.txt"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/60_new_board_bringup.sh",
+      "runtime": "scripts/board/60_new_board_bringup.sh",
+      "origin": "scripts/board/60_new_board_bringup.sh"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/RoomReview.desktop",
+      "runtime": "scripts/board/RoomReview.desktop",
+      "origin": "scripts/board/RoomReview.desktop"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/RoomReviewMenu.desktop",
+      "runtime": "scripts/board/RoomReviewMenu.desktop",
+      "origin": "scripts/board/RoomReviewMenu.desktop"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/asr_service.py",
+      "runtime": "scripts/board/asr_service.py",
+      "origin": "scripts/board/asr_service.py"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/ensure_room_vlm.sh",
+      "runtime": "scripts/board/ensure_room_vlm.sh",
+      "origin": "scripts/board/ensure_room_vlm.sh"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/make_cues.py",
+      "runtime": "scripts/board/make_cues.py",
+      "origin": "scripts/board/make_cues.py"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/new_board_bringup.py",
+      "runtime": "scripts/board/new_board_bringup.py",
+      "origin": "scripts/board/new_board_bringup.py"
+    },
+    {
+      "source": "云台控制模块/scripts/board/restore_gimbal_initial.py",
+      "runtime": "scripts/board/restore_gimbal_initial.py",
+      "origin": "scripts/board/restore_gimbal_initial.py"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/room_review_gui.sh",
+      "runtime": "scripts/board/room_review_gui.sh",
+      "origin": "scripts/board/room_review_gui.sh"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/start_room_review.sh",
+      "runtime": "scripts/board/start_room_review.sh",
+      "origin": "scripts/board/start_room_review.sh"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/thunar-daemon.desktop",
+      "runtime": "scripts/board/thunar-daemon.desktop",
+      "origin": "scripts/board/thunar-daemon.desktop"
+    },
+    {
+      "source": "K1风险初评主程序/scripts/board/voice_gimbal30.sh",
+      "runtime": "scripts/board/voice_gimbal30.sh",
+      "origin": "scripts/board/voice_gimbal30.sh"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/accept_new_board.py",
+      "runtime": "scripts/pc/accept_new_board.py",
+      "origin": "scripts/pc/accept_new_board.py"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/deploy_room_review.py",
+      "runtime": "scripts/pc/deploy_room_review.py",
+      "origin": "scripts/pc/deploy_room_review.py"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/find-k1.ps1",
+      "runtime": "scripts/pc/find-k1.ps1",
+      "origin": "scripts/pc/find-k1.ps1"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/k1.py",
+      "runtime": "scripts/pc/k1.py",
+      "origin": "scripts/pc/k1.py"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/make_offline_bundle.py",
+      "runtime": "scripts/pc/make_offline_bundle.py",
+      "origin": "scripts/pc/make_offline_bundle.py"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/sync_room_review.py",
+      "runtime": "scripts/pc/sync_room_review.py",
+      "origin": "scripts/pc/sync_room_review.py"
+    },
+    {
+      "source": "PC端部署与报告工具/scripts/pc/watch_report_to_desktop.py",
+      "runtime": "scripts/pc/watch_report_to_desktop.py",
+      "origin": "scripts/pc/watch_report_to_desktop.py"
+    },
+    {
+      "source": "K1风险初评主程序/tests/test_asr_sensevoice.py",
+      "runtime": "tests/test_asr_sensevoice.py",
+      "origin": "tests/test_asr_sensevoice.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_buyer_report.py",
+      "runtime": "tests/test_buyer_report.py",
+      "origin": "tests/test_buyer_report.py"
+    },
+    {
+      "source": "K1风险初评主程序/tests/test_cues.py",
+      "runtime": "tests/test_cues.py",
+      "origin": "tests/test_cues.py"
+    },
+    {
+      "source": "云台控制模块/tests/test_gimbal_flow30.py",
+      "runtime": "tests/test_gimbal_flow30.py",
+      "origin": "tests/test_gimbal_flow30.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_new_board_kit.py",
+      "runtime": "tests/test_new_board_kit.py",
+      "origin": "tests/test_new_board_kit.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_offline_bundle.py",
+      "runtime": "tests/test_offline_bundle.py",
+      "origin": "tests/test_offline_bundle.py"
+    },
+    {
+      "source": "云台控制模块/tests/test_pca_driver.py",
+      "runtime": "tests/test_pca_driver.py",
+      "origin": "tests/test_pca_driver.py"
+    },
+    {
+      "source": "K1风险初评主程序/tests/test_photo_pipeline.py",
+      "runtime": "tests/test_photo_pipeline.py",
+      "origin": "tests/test_photo_pipeline.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_polish_packet.py",
+      "runtime": "tests/test_polish_packet.py",
+      "origin": "tests/test_polish_packet.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_polish_report.py",
+      "runtime": "tests/test_polish_report.py",
+      "origin": "tests/test_polish_report.py"
+    },
+    {
+      "source": "PC端部署与报告工具/tests/test_review_regressions.py",
+      "runtime": "tests/test_review_regressions.py",
+      "origin": "tests/test_review_regressions.py"
+    },
+    {
+      "source": "K1风险初评主程序/tests/test_risk_degree_reporting.py",
+      "runtime": "tests/test_risk_degree_reporting.py",
+      "origin": "tests/test_risk_degree_reporting.py"
+    },
+    {
+      "source": "K1风险初评主程序/tests/test_room_review.py",
+      "runtime": "tests/test_room_review.py",
+      "origin": "tests/test_room_review.py"
+    },
+    {
+      "source": "K1风险初评主程序/app/vlm_runtime.py",
+      "runtime": "app/vlm_runtime.py",
+      "origin": "scripts/validation/run_board_study.py"
+    },
+    {
+      "source": "K1风险初评主程序/app/risk_degree.py",
+      "runtime": "app/risk_degree.py",
+      "origin": "scripts/validation/analyze_risk_degree.py"
+    },
+    {
+      "source": "云台控制模块/gimbal/__init__.py",
+      "runtime": "gimbal/__init__.py",
+      "origin": "整理后正式入口/配置"
+    },
+    {
+      "source": "云台控制模块/gimbal/__main__.py",
+      "runtime": "gimbal/__main__.py",
+      "origin": "整理后正式入口/配置"
+    },
+    {
+      "source": "云台控制模块/gimbal/config.json",
+      "runtime": "gimbal/config.json",
+      "origin": "整理后正式入口/配置"
+    },
+    {
+      "source": "云台控制模块/requirements-gimbal.txt",
+      "runtime": "requirements-gimbal.txt",
+      "origin": "整理后正式入口/配置"
+    }
+  ],
+  "archived": [
+    {
+      "path": "历史归档/20261108-非正式入口/app/README.md",
+      "origin": "app/README.md",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/ask.py",
+      "origin": "app/ask.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/config.yaml",
+      "origin": "app/config.yaml",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/display.py",
+      "origin": "app/display.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/gimbal_scan.py",
+      "origin": "app/gimbal_scan.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/intent.py",
+      "origin": "app/intent.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/llm.py",
+      "origin": "app/llm.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/main.py",
+      "origin": "app/main.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/metrics.py",
+      "origin": "app/metrics.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/photo_detect.py",
+      "origin": "app/photo_detect.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/photo_detect_config.json",
+      "origin": "app/photo_detect_config.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/servo.py",
+      "origin": "app/servo.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/app/vision_contracts.py",
+      "origin": "app/vision_contracts.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/design_validation.json",
+      "origin": "configs/risk_assessment_v1/design_validation.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/inputs.current_scene.json",
+      "origin": "configs/risk_assessment_v1/inputs.current_scene.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/report.example.json",
+      "origin": "configs/risk_assessment_v1/report.example.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/runtime.example.json",
+      "origin": "configs/risk_assessment_v1/runtime.example.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/system_prompt.zh.txt",
+      "origin": "configs/risk_assessment_v1/system_prompt.zh.txt",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/view_prompt.zh.txt",
+      "origin": "configs/risk_assessment_v1/view_prompt.zh.txt",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/configs/risk_assessment_v1/view_response.schema.json",
+      "origin": "configs/risk_assessment_v1/view_response.schema.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/README-硬件适配-20261106.md",
+      "origin": "gimbal/README-硬件适配-20261106.md",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/__init__.py",
+      "origin": "gimbal/__init__.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/__main__.py",
+      "origin": "gimbal/__main__.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/cli.py",
+      "origin": "gimbal/cli.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/config.json",
+      "origin": "gimbal/config.json",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/control.py",
+      "origin": "gimbal/control.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/hw.py",
+      "origin": "gimbal/hw.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/mic.py",
+      "origin": "gimbal/mic.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/mpu6050.py",
+      "origin": "gimbal/mpu6050.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/pwmsysfs.py",
+      "origin": "gimbal/pwmsysfs.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/scan.py",
+      "origin": "gimbal/scan.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/selftest.py",
+      "origin": "gimbal/selftest.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/servo.py",
+      "origin": "gimbal/servo.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/gimbal/voice.py",
+      "origin": "gimbal/voice.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/00_check_env.sh",
+      "origin": "scripts/00_check_env.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/01_build_llamacpp.sh",
+      "origin": "scripts/01_build_llamacpp.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/02_get_models.sh",
+      "origin": "scripts/02_get_models.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/03_bench.sh",
+      "origin": "scripts/03_bench.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/analyze_rassar.py",
+      "origin": "scripts/analyze_rassar.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/10_env_setup.sh",
+      "origin": "scripts/board/10_env_setup.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/20_llm_deploy.sh",
+      "origin": "scripts/board/20_llm_deploy.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/21_serve_llamacpp.sh",
+      "origin": "scripts/board/21_serve_llamacpp.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/30_oled_check.sh",
+      "origin": "scripts/board/30_oled_check.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/31_py_deps.sh",
+      "origin": "scripts/board/31_py_deps.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/32_screen_walk.sh",
+      "origin": "scripts/board/32_screen_walk.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/33_init_probe.sh",
+      "origin": "scripts/board/33_init_probe.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/34_llm_bench.sh",
+      "origin": "scripts/board/34_llm_bench.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/35_contract_and_latency.sh",
+      "origin": "scripts/board/35_contract_and_latency.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/36_font_probe.sh",
+      "origin": "scripts/board/36_font_probe.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/37_verify.sh",
+      "origin": "scripts/board/37_verify.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/38_cn_input.sh",
+      "origin": "scripts/board/38_cn_input.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/40_fix_i2c_perm.sh",
+      "origin": "scripts/board/40_fix_i2c_perm.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/50_preflight_readonly.sh",
+      "origin": "scripts/board/50_preflight_readonly.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/build_room_asr_command.sh",
+      "origin": "scripts/board/build_room_asr_command.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/build_room_asr_rvv.sh",
+      "origin": "scripts/board/build_room_asr_rvv.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/ensure_photo_vlm.sh",
+      "origin": "scripts/board/ensure_photo_vlm.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/gimbal_coupling_check.sh",
+      "origin": "scripts/board/gimbal_coupling_check.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/gimbal_pca_readback.sh",
+      "origin": "scripts/board/gimbal_pca_readback.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/gimbal_pose_grid.sh",
+      "origin": "scripts/board/gimbal_pose_grid.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/gimbal_swing.sh",
+      "origin": "scripts/board/gimbal_swing.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/llm_decision_bench.py",
+      "origin": "scripts/board/llm_decision_bench.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/prepare_room_asr_rvv.py",
+      "origin": "scripts/board/prepare_room_asr_rvv.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/record_corpus.py",
+      "origin": "scripts/board/record_corpus.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/room_asr_command.cpp",
+      "origin": "scripts/board/room_asr_command.cpp",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/room_asr_rvv.h",
+      "origin": "scripts/board/room_asr_rvv.h",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/scan_gimbal.sh",
+      "origin": "scripts/board/scan_gimbal.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/test_room_asr_rvv.c",
+      "origin": "scripts/board/test_room_asr_rvv.c",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/tools_echo_test.py",
+      "origin": "scripts/board/tools_echo_test.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/board/vlm_spike.py",
+      "origin": "scripts/board/vlm_spike.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/dump_k1_manual.py",
+      "origin": "scripts/dump_k1_manual.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/hash_rassar.py",
+      "origin": "scripts/hash_rassar.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/inspect_rassar.py",
+      "origin": "scripts/inspect_rassar.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/k1_detect_image.py",
+      "origin": "scripts/k1_detect_image.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/k1_smoke.py",
+      "origin": "scripts/k1_smoke.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/k1_vlm_download.sh",
+      "origin": "scripts/k1_vlm_download.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/k1_vlm_start.sh",
+      "origin": "scripts/k1_vlm_start.sh",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/k1_vlm_test.py",
+      "origin": "scripts/k1_vlm_test.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/list_rassar_zip.py",
+      "origin": "scripts/list_rassar_zip.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/pc/detect_photo.py",
+      "origin": "scripts/pc/detect_photo.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/pc/k1-console.ps1",
+      "origin": "scripts/pc/k1-console.ps1",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/pc/k1_dev.py",
+      "origin": "scripts/pc/k1_dev.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/train/check_dataset.py",
+      "origin": "scripts/train/check_dataset.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/train/dataset.yaml.example",
+      "origin": "scripts/train/dataset.yaml.example",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/train/train_yolo.py",
+      "origin": "scripts/train/train_yolo.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/analyze_risk_degree.py",
+      "origin": "scripts/validation/analyze_risk_degree.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/analyze_study.py",
+      "origin": "scripts/validation/analyze_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/build_image_gallery.py",
+      "origin": "scripts/validation/build_image_gallery.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/download_vlm.py",
+      "origin": "scripts/validation/download_vlm.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/fetch_homesafe_subset.py",
+      "origin": "scripts/validation/fetch_homesafe_subset.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_board_study.py",
+      "origin": "scripts/validation/run_board_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_budget_study.py",
+      "origin": "scripts/validation/run_budget_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_format_study.py",
+      "origin": "scripts/validation/run_format_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_risk_degree_study.py",
+      "origin": "scripts/validation/run_risk_degree_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_text_study.py",
+      "origin": "scripts/validation/run_text_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/run_user_four_photos.py",
+      "origin": "scripts/validation/run_user_four_photos.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/score_presence.py",
+      "origin": "scripts/validation/score_presence.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/screen_small_model.py",
+      "origin": "scripts/validation/screen_small_model.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/sync_risk_degree.py",
+      "origin": "scripts/validation/sync_risk_degree.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/sync_study.py",
+      "origin": "scripts/validation/sync_study.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/transition_presence.py",
+      "origin": "scripts/validation/transition_presence.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/validation/verify_study_evidence.py",
+      "origin": "scripts/validation/verify_study_evidence.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/README.md",
+      "origin": "scripts/vlm_eval/README.md",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/make_blind.py",
+      "origin": "scripts/vlm_eval/make_blind.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/make_candidates.py",
+      "origin": "scripts/vlm_eval/make_candidates.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/run_eval.py",
+      "origin": "scripts/vlm_eval/run_eval.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/run_eval_b.py",
+      "origin": "scripts/vlm_eval/run_eval_b.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/run_eval_c.py",
+      "origin": "scripts/vlm_eval/run_eval_c.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/score.py",
+      "origin": "scripts/vlm_eval/score.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/scripts/vlm_eval/select_sun.py",
+      "origin": "scripts/vlm_eval/select_sun.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_gimbal_scan.py",
+      "origin": "tests/test_gimbal_scan.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_llm_regressions.py",
+      "origin": "tests/test_llm_regressions.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_mvp.py",
+      "origin": "tests/test_mvp.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_pipeline.py",
+      "origin": "tests/test_pipeline.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_validation_scoring.py",
+      "origin": "tests/test_validation_scoring.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/tests/test_vision_contracts.py",
+      "origin": "tests/test_vision_contracts.py",
+      "reason": "不在当前语音→四角度→0.8B→报告运行链路及所需运维/测试依赖中"
+    },
+    {
+      "path": "历史归档/20261108-非正式入口/README-整理前运行说明.md",
+      "origin": "README.md",
+      "reason": "整理前扁平目录运行说明，保留历史原文"
+    }
+  ]
+}

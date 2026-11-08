@@ -1,0 +1,2 @@
+# Linux I2C 使用 Python 标准库；无需 smbus2。
+# 四角度采图编排另需主程序模块的 Pillow/numpy。
