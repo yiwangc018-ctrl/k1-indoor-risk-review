@@ -343,7 +343,7 @@ class RoundTests(unittest.TestCase):
             state = review.audio_check(self.config)
         self.assertFalse(state["ok"])
         self.assertIn("未找到 USB 音箱", state["error"])
-        saved = review.load(self.root / "rounds" / ".." / "audio_state.json")
+        saved = review.load(self.root / "audio_state.json")
         self.assertEqual(saved["sinks"], ["alsa_output.builtin"])
         self.assertFalse(saved["played"])
 
