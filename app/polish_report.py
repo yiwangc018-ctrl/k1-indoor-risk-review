@@ -165,6 +165,7 @@ def compose_markdown(facts, summary, advice):
 
 def write_polished(packet_dir, facts, digest, summary, advice, tool, by, source):
     packet_dir = Path(packet_dir)
+    polish_packet._write_json(packet_dir / "model_output.json", {"summary": summary, "advice": advice})
     (packet_dir / "polished.md").write_text(
         compose_markdown(facts, summary, advice), encoding="utf-8"
     )
@@ -203,7 +204,7 @@ def build_prompt(facts, draft):
 3. 不得写"检测结论""已确认安全""全屋覆盖""完整完成""全部完成"。
 4. 不得把"模型初评"写成"检测结论"。
 5. summary 用 2–4 句中文，客观概括本轮可见区域的关注程度和优先方向；
-   可以提到总体关注程度，但必须与事实一致。
+   只可提到总体关注程度，不要在 summary 中逐张列等级；必须与 overall_level 一致。
 6. advice 数组长度必须等于 {len(regions)}（当前重点区域数），第 i 句对应第 i 个区域；
    只改建议措辞，不得出现新的区域名或与事实不同的等级词。
 7. 不要建议补拍、加拍或改变拍摄流程；建议只针对可见区域的整理。
@@ -351,7 +352,7 @@ def cmd_run(args):
     prompt = build_prompt(facts, draft)
     (Path(args.packet) / "prompt.md").write_text(prompt, encoding="utf-8")
     raw = chat(args.backend, args.host, args.model, prompt, args.timeout)
-    output_file = Path(args.packet) / "model_output.json"
+    output_file = Path(args.packet) / "model_response.txt"
     output_file.write_text(raw, encoding="utf-8")
     model_output = parse_model_output(raw)
     summary, advice = validate_slots(facts, model_output)

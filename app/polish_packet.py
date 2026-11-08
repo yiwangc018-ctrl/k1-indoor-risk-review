@@ -39,10 +39,8 @@ EDITABLE_FIELDS = {"narrative", "bullets", "summary", "tone", "grammar", "order"
 HUMAN_LABEL = "人工后处理"
 
 _LEVEL_CLAIMS = (
-    re.compile(r"关注程度\s*[:：]?\s*\**\s*(低|中|高)"),
-    re.compile(r"(?<![降])(低|中|高)\s*风险"),
-    re.compile(r"风险\s*[:：]?\s*\**\s*(低|中|高)"),
-    re.compile(r"等级\s*[:：]?\s*\**\s*(低|中|高)"),
+    re.compile(r"(?:关注程度|风险|等级)\s*(?:为|是|[:：])?\s*[*「」『』“”\"\s]*(低|中|高)"),
+    re.compile(r"(?<![降])(低|中|高)\s*(?:等|级)?\s*(?:风险|关注程度)"),
 )
 
 # 部分完成 / 失败时，不许把"部分"写成"完整"。
@@ -141,6 +139,22 @@ def _level_claims(text):
     return claimed
 
 
+def validate_wording(facts, summary, advice):
+    """校验槽位对应的等级：摘要对应整体，每条建议对应一个重点区域。"""
+    problems = []
+    slots = [("summary", summary, facts.get("overall_level"))]
+    slots += [(f"advice[{i}]", text, region.get("level"))
+              for i, (text, region) in enumerate(zip(advice, facts.get("priority_regions") or []))]
+    for name, text, expected in slots:
+        allowed = {expected} if expected in LEVEL_LABELS else set()
+        if _level_claims(text) - allowed:
+            problems.append(f"{name} 出现与对应事实冲突的等级（只允许 {sorted(allowed)}）")
+    if facts.get("status") in ("partial", "failed") and _COMPLETE_CLAIMS.search(
+            summary + "\n" + "\n".join(advice)):
+        problems.append("本轮是部分完成/失败，润色稿不得出现完整/全部完成/覆盖表述")
+    return problems
+
+
 def validate_packet(packet_dir):
     """返回问题列表；空列表表示这稿可以用作报告。不做任何"修复"。"""
     packet_dir = Path(packet_dir)
@@ -187,6 +201,17 @@ def validate_packet(packet_dir):
     if facts.get("status") in ("partial", "failed") and _COMPLETE_CLAIMS.search(polished):
         problems.append("本轮是部分完成/失败，润色稿不得出现“完整/全部完成/覆盖”这类表述")
 
+    output_file = packet_dir / "model_output.json"
+    if output_file.is_file():
+        output = _load(output_file)
+        summary, advice = output.get("summary"), output.get("advice")
+        if not isinstance(summary, str) or not isinstance(advice, list) or any(
+                not isinstance(item, str) for item in advice):
+            problems.append("model_output.json 的 summary/advice 类型非法")
+        elif len(advice) != len(facts.get("priority_regions") or []):
+            problems.append("model_output.json 的 advice 数量与重点区域不一致")
+        else:
+            problems.extend(validate_wording(facts, summary, advice))
     return problems
 
 

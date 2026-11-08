@@ -106,7 +106,7 @@ After=network.target
 [Service]
 Type=forking
 ExecStartPre=-/usr/bin/vncserver -kill :1
-ExecStart=/usr/bin/vncserver :1 -geometry 1600x900 -depth 24 -AlwaysShared -SecurityTypes None -localhost no --I-KNOW-THIS-IS-INSECURE
+ExecStart=/usr/bin/vncserver :1 -geometry 1600x900 -depth 24 -AlwaysShared -SecurityTypes None -localhost yes
 ExecStop=/usr/bin/vncserver -kill :1
 Restart=on-failure
 RestartSec=5
@@ -138,13 +138,14 @@ VNC_NOTE = """K1 远程桌面（VNC）说明
 ======================
 更新：2026-11-08（新板，用户名 biandu）
 
-显示 :1 / 端口 5901，分辨率 1600x900，桌面 XFCE，无密码。
+显示 :1 / 端口 5901，分辨率 1600x900，桌面 XFCE，仅监听板端回环地址。
+VNC 本身无密码，必须先通过 SSH 身份认证建立隧道。
 
-Windows 端连接：
-  TigerVNC 查看器输入   k1.local:1
-  或                    k1.local:5901
-IP 由热点 DHCP 分配，会变；用 k1.local（mDNS）就不用改。解析失败时在 PC 上
-跑 scripts/pc/find-k1.ps1 找当前 IP。
+Windows 端连接（先保持这个终端打开）：
+  ssh -N -L 15901:127.0.0.1:5901 biandu@k1.local
+然后在 TigerVNC 查看器输入：
+  127.0.0.1::15901
+IP 由热点 DHCP 分配；mDNS 不可用时用 scripts/pc/find-k1.ps1 找板子 IP。
 
 启动/停止/排错（板端 SSH，用户 biandu）：
   systemctl --user status tigervnc
@@ -155,11 +156,8 @@ IP 由热点 DHCP 分配，会变；用 k1.local（mDNS）就不用改。解析�
 
 开机自启：用户服务 + loginctl enable-linger biandu，重启后不需要登录。
 
-安全边界：无密码且监听所有网卡，只用于自家热点/可信局域网；
-换到校园网/公共网络前先加密码：
-  vncpasswd
-  然后把服务文件里的 -SecurityTypes None 换成 -SecurityTypes VncAuth
-  （~/.config/systemd/user/tigervnc.service），再 systemctl --user restart tigervnc。
+不要把 -localhost yes 改为 no；远程访问统一走 SSH 隧道。
+这次安装会覆盖已有 tigervnc.service，旧的局域网直连方式需改用隧道。
 
 已知坑：
 - 不要用 gnome-session 做 VNC 会话：用户级 systemd 里会失败，显示
@@ -540,29 +538,49 @@ def step_payload(args):
     return True
 
 
+# 固定官方 Release 与 SHA256；不能把缺运行时当作成功跳过。
+RUNTIME_DOWNLOADS = {
+    "llama_017.tar.gz": (
+        "https://github.com/spacemit-com/llama.cpp/releases/download/v0.1.7/spacemit-llama.cpp.riscv64.0.1.7.tar.gz",
+        "2e24e51d77b8bf44d376ce84b388af817f05a924c5ba38698c1d36c4f9d8f8da"),
+    "ort_206.tar.gz": (
+        "https://github.com/spacemit-com/onnxruntime/releases/download/2.0.6/spacemit-ort.riscv64.2.0.6.tar.gz",
+        "bebcdfb7df6b49eefa3863afcd85a3da2aa83c3ae9252d7d856188c38a70b0e6"),
+}
+
+
 def step_runtime(args):
-    section("runtime：解压 K1 运行时")
-    RUNTIME.mkdir(parents=True, exist_ok=True)
+    section("runtime：取得并解压 K1 运行时")
+    if not DRY:
+        RUNTIME.mkdir(parents=True, exist_ok=True)
+    ok = True
     for tar_name, expect in (("llama_017.tar.gz", LLAMA_DIR / "bin/llama-server"),
                              ("ort_206.tar.gz", ORT_DIR / "lib")):
-        tar_path = RUNTIME / tar_name
-        if not tar_path.exists():
-            mark(WARN, f"缺 {tar_name}", "离线包里应带；没有就跳过，VLM/ORT 会不可用")
-            continue
         if expect.exists():
             mark(OK, f"{tar_name} 已解压", str(expect))
+            continue
+        tar_path = RUNTIME / tar_name
+        runtime_dir = getattr(args, "runtime_dir", None)
+        if runtime_dir and not tar_path.exists():
+            candidate = Path(runtime_dir).expanduser() / tar_name
+            if candidate.is_file():
+                if DRY:
+                    mark(OK, f"将校验并复制 {tar_name}", str(candidate))
+                    tar_path = candidate
+                else:
+                    shutil.copyfile(candidate, tar_path)
+        url, digest = RUNTIME_DOWNLOADS[tar_name]
+        if not ensure_tar(tar_path, url, sha256=digest, offline=args.offline):
+            ok = False
             continue
         if DRY:
             mark(OK, "将解压", str(tar_path))
             continue
-        code, out, err = run(["tar", "-xzf", str(tar_path), "-C", str(RUNTIME)], timeout=300)
-        if code != 0:
-            mark(FAIL, f"解压 {tar_name}", err.strip()[:300])
-            continue
-        mark(OK, f"解压 {tar_name}", "完成")
-    for path in (LLAMA_DIR / "bin/llama-server", ORT_DIR / "lib"):
-        mark(OK if path.exists() else FAIL, f"运行时 {path}", "存在" if path.exists() else "缺失")
-    return True
+        code, _, err = run(["tar", "-xzf", str(tar_path), "-C", str(RUNTIME)], timeout=300)
+        ready = code == 0 and expect.exists()
+        mark(OK if ready else FAIL, f"运行时 {expect}", "就绪" if ready else err.strip()[:300] or "解压后缺文件")
+        ok = ok and ready
+    return ok
 
 
 def ensure_tar(path, url, sha256=None, md5=None, offline=False):
@@ -586,7 +604,7 @@ def ensure_tar(path, url, sha256=None, md5=None, offline=False):
         mark(OK, f"将下载 {path.name}", url)
         return True
     path.parent.mkdir(parents=True, exist_ok=True)
-    code, _, err = run(["curl", "-L", "--retry", "3", "--retry-delay", "2", "-C", "-",
+    code, _, err = run(["curl", "--fail", "-L", "--retry", "3", "--retry-delay", "2", "-C", "-",
                         "-o", str(path), url], timeout=3600)
     if code != 0:
         mark(FAIL, f"下载 {path.name}", err.strip()[:300])
@@ -1012,7 +1030,8 @@ def main(argv=None):
     install = sub.add_parser("install", help="执行恢复（幂等，可重复跑）")
     install.add_argument("--bundle", help="离线包解压目录（含 payload/ 与 manifest.json）")
     install.add_argument("--models-dir", help="模型 tar.gz 所在目录（默认 ~/rv/offline/models）")
-    install.add_argument("--offline", action="store_true", help="缺模型时直接失败，不联网")
+    install.add_argument("--runtime-dir", help="运行时 tar.gz 所在目录（llama_017.tar.gz / ort_206.tar.gz）")
+    install.add_argument("--offline", action="store_true", help="缺模型或运行时时直接失败，不联网")
     install.add_argument("--dry-run", action="store_true", help="只打印将执行的动作")
     install.add_argument("--only", help="只跑指定步骤，逗号分隔")
     install.add_argument("--skip", help="跳过指定步骤，逗号分隔")

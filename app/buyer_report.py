@@ -291,6 +291,10 @@ def build(round_dir, out_path=None, title="本轮室内环境风险初评"):
         (region.get("suggestion") or "").strip() for region in regions
     ]
 
+    wording_problems = polish_packet.validate_wording(analysis, summary, advice)
+    if wording_problems:
+        raise ReportError("；".join(wording_problems))
+
     # 事实锁的文本层：润色/模型输出只能改措辞，不得改等级，也不得把部分完成写成完整。
     allowed_levels = {overall} | {v.get("level") for v in views
                                   if v.get("usable") and v.get("level") in LABELS}

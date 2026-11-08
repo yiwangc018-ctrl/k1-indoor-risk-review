@@ -65,8 +65,28 @@ python3 scripts/board/new_board_bringup.py install --only models
 # 已有离线包：加 --models-dir <目录>；完全离线：加 --offline
 ```
 
-另外还需要 llama.cpp 0.1.7 和 spacemit-ort 2.0.6，由 `scripts/board/ensure_room_vlm.sh`
-拉起常驻的 VLM 服务（端口 8099），避免每次分析都付十几秒冷启动。权重按各自的原始许可证使用，仓库不分发。
+另外还需要 llama.cpp 0.1.7 和 spacemit-ort 2.0.6。首次克隆到新板后，执行：
+
+```bash
+python3 scripts/board/new_board_bringup.py install --only dirs,runtime,models,cues
+```
+
+`runtime` 从官方 GitHub Release 下载并校验 SHA256，解压到
+`~/rv/validation_20261103/runtime_archives/`：
+
+| 运行时 | 官方来源 | SHA256 |
+|---|---|---|
+| llama.cpp 0.1.7 | [下载](https://github.com/spacemit-com/llama.cpp/releases/download/v0.1.7/spacemit-llama.cpp.riscv64.0.1.7.tar.gz) | `2e24e51d77b8bf44d376ce84b388af817f05a924c5ba38698c1d36c4f9d8f8da` |
+| ORT 2.0.6 | [下载](https://github.com/spacemit-com/onnxruntime/releases/download/2.0.6/spacemit-ort.riscv64.2.0.6.tar.gz) | `bebcdfb7df6b49eefa3863afcd85a3da2aa83c3ae9252d7d856188c38a70b0e6` |
+
+离线时将下载文件分别命名为 `llama_017.tar.gz`、`ort_206.tar.gz`，使用
+`install --only runtime --runtime-dir <目录> --offline`。缺文件或校验失败会报错退出。
+`scripts/board/ensure_room_vlm.sh` 只负责拉起常驻 VLM 服务（端口 8099），不负责安装运行时。
+权重与运行时按各自的原始许可证使用，仓库不分发。
+
+新板安装的 VNC 仅监听板端回环地址。Windows 先运行
+`ssh -N -L 15901:127.0.0.1:5901 biandu@k1.local`，保持终端打开，
+再用 TigerVNC 连接 `127.0.0.1::15901`。重新安装 `vnc` 步骤会将旧的局域网直连切换为 SSH 隧道。
 
 ## 板端运行
 
@@ -114,6 +134,9 @@ python app/buyer_report.py <round_dir>
 ```
 
 输出是 `<round_dir>/report.html`。事实锁校验不通过时脚本会直接报错，不要绕过。
+`compose`、`template` 和 `run` 都将摘要/建议写到 `polish/model_output.json`，HTML 从同一文件读取。
+`run` 的模型原始回复另存为 `polish/model_response.txt`。摘要只能陈述整体等级，
+每条建议中的等级只能对应同序重点区域；文本检查仍不能证明模型所述视觉事实正确。
 
 `scripts/pc/watch_report_to_desktop.py` 可以轮询板端轮次，把新生成的 `report.html` 自动复制到 Windows 桌面，
 日志在 `%LOCALAPPDATA%\K1ReportWatcher\watcher.log`。
@@ -124,7 +147,7 @@ python app/buyer_report.py <round_dir>
 python -m unittest discover -s tests
 ```
 
-PC 侧 311 项用例，不需要板卡、摄像头、云台或权重。覆盖照片处理与旋转、VLM 输出契约与提示词、
+PC 侧 325 项用例，不需要板卡、摄像头、云台或权重。覆盖照片处理与旋转、VLM 输出契约与提示词、
 风险等级汇总、报告事实锁与买家版 HTML、云台 30 秒流程的时序计算、轮次状态机、PCA9685 驱动、
 提示音与语音模块、离线包与部署脚本的纯函数部分。真实拍照、ASR/VLM 实际耗时、舵机转位、
 音箱放音这些必须有板卡才能验。

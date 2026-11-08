@@ -26,6 +26,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 from dataclasses import dataclass
 from datetime import datetime
 import hashlib
@@ -285,118 +286,118 @@ def run_flow30(config, *, pulse=None, capture=None, analyze=True, rotate_deg=0,
     if capture is None:
         capture = lambda target, log_path: _default_capture(config, target, log_path)
 
-    start_pan = pulse.read_us(PAN_CHANNEL)
-    start_tilt = pulse.read_us(TILT_CHANNEL)
-    meta["gimbal"]["start"] = {"pan_us": round(start_pan, 1), "tilt_us": round(start_tilt, 1)}
-    rr.write_json(folder / "meta.json", meta)
-
-    if not dry_run and (abs(start_pan - START_PAN_US) > 50 or abs(start_tilt - START_TILT_US) > 50):
-        meta.update(status="refused",
-                    error="起始姿态不是 512.7/2055.7；PCA 可能被清零，请先恢复，未动电机")
-        rr.write_json(folder / "meta.json", meta)
-        if owns_pulse:
-            pulse.close()
-        raise RuntimeError(
-            "云台不在交接包初始姿态（当前 pan=%.1f tilt=%.1f，期望 %.1f/%.1f）。"
-            "PCA 可能被 Hardware(cfg)/菜单6 清零；先用 /tmp/restore_initial_pca.py "
-            "慢速恢复，本次未动电机。" % (start_pan, start_tilt, START_PAN_US, START_TILT_US))
-
-    if dry_run:
-        meta.update(status="dry_run", completed_at=rr.now(), views_captured=0,
-                    plan={"pan_us": list(PAN_TARGETS_US), "tilt_up_us": TILT_UP_US,
-                          "return_to": {"pan_us": round(start_pan, 1),
-                                        "tilt_us": round(start_tilt, 1)}})
-        rr.write_json(folder / "meta.json", meta)
-        write_state(config, folder, phase="dry_run", index=0, total=len(PAN_TARGETS_US),
-                    message="干跑：只读起始姿态，未动舵机、未拍图")
-        if owns_pulse:
-            pulse.close()
-        log(f"干跑：起始 pan={start_pan:.1f}µs tilt={start_tilt:.1f}µs；"
-            f"计划 pan={list(PAN_TARGETS_US)} tilt_up={TILT_UP_US}µs")
-        return folder
-
-    target_pan = [clamp_us(value, PAN_MIN_US, PAN_MAX_US) for value in PAN_TARGETS_US]
-    target_tilt_up = clamp_us(TILT_UP_US, TILT_MIN_US, TILT_MAX_US)
-
+    lock_ctx = nullcontext() if dry_run else (
+        lock(inbox / ".camera.lock") if lock is not None else rr.exclusive(inbox / ".camera.lock"))
     try:
-        lock_ctx = lock(inbox / ".camera.lock") if lock is not None else rr.exclusive(inbox / ".camera.lock")
         with lock_ctx:
-            if cue:
-                rr.announce(config, "start", meta["events"])
-            started = time.perf_counter()
-
-            _ramp(pulse, TILT_CHANNEL, target_tilt_up, timing.move_s, timing.steps,
-                  timing.settle_s, sleep, "上移", log)
-
-            for index, target in enumerate(target_pan, start=1):
-                ident = "view_%02d" % index
-                _ramp(pulse, PAN_CHANNEL, target, timing.move_s, timing.steps,
-                      timing.settle_s, sleep, ident, log)
-                rr.write_json(folder / "meta.json", meta)
-                write_state(config, folder, phase="capturing", index=index,
-                            total=len(target_pan), message=f"第 {index}/{len(target_pan)} 个角度，准备拍照")
-                hold_start = time.perf_counter()
-                pan_us = pulse.read_us(PAN_CHANNEL)
-                tilt_us = pulse.read_us(TILT_CHANNEL)
-                raw = originals / (ident + "_raw.jpg")
-                target_file = originals / (ident + ".jpg")
-                captured = capture(raw, folder / (ident + "_capture.log"))
-                _rotate_image(raw, target_file, int(rotate_deg))
-                remain = timing.hold_s - (time.perf_counter() - hold_start)
-                if remain > 0:
-                    sleep(remain)
-                record = {
-                    "commanded": {
-                        "pan_us": round(pan_us, 1),
-                        "tilt_us": round(tilt_us, 1),
-                        "pan": pan_deg(pan_us),
-                        "tilt": tilt_deg(tilt_us),
-                    },
-                    "measured": None,
-                    "source": "commanded",
-                    "pan_source": "commanded",
-                    "rotation_deg": int(rotate_deg),
-                }
-                meta["views"].append({
-                    "view_id": ident,
-                    "file": target_file.relative_to(folder).as_posix(),
-                    "raw_file": raw.relative_to(folder).as_posix(),
-                    "size": captured["size"],
-                    "sha256": hashlib.sha256(target_file.read_bytes()).hexdigest(),
-                    "captured_at": rr.now(),
-                    "seconds": captured["seconds"],
-                    "hold_started_s": round(hold_start - started, 2),
-                    "pose": record,
-                })
-                rr.write_json(folder / "meta.json", meta)
-                write_state(config, folder, phase="capturing", index=index,
-                            total=len(target_pan), photo=target_file.relative_to(folder).as_posix(),
-                            pose=record,
-                            message=f"已拍 {index}/{len(target_pan)} 张，pan={record['commanded']['pan']:.0f}°")
-                log(f"照片已保存：{target_file}（pan={pan_us:.1f}µs/{record['commanded']['pan']:.1f}°，"
-                    f"tilt={tilt_us:.1f}µs/{record['commanded']['tilt']:.1f}°，"
-                    f"旋转 {rotate_deg}°）")
-    except BaseException as exc:
-        meta.update(status="capture_failed", error=f"{type(exc).__name__}: {exc}")
-        rr.write_json(folder / "meta.json", meta)
-        write_state(config, folder, phase="error", index=len(meta["views"]),
-                    total=len(target_pan), message=f"采集失败：{exc}")
-        raise
-    finally:
-        # 无论成功失败都尽量回起始姿态，并保持力矩（不卸力）。
-        try:
-            _ramp2(pulse, start_pan, start_tilt, timing.return_s, timing.steps,
-                   timing.settle_s, sleep, log)
-            meta["gimbal"]["returned"] = {"pan_us": round(pulse.read_us(PAN_CHANNEL), 1),
-                                          "tilt_us": round(pulse.read_us(TILT_CHANNEL), 1)}
+            start_pan = pulse.read_us(PAN_CHANNEL)
+            start_tilt = pulse.read_us(TILT_CHANNEL)
+            meta["gimbal"]["start"] = {"pan_us": round(start_pan, 1), "tilt_us": round(start_tilt, 1)}
             rr.write_json(folder / "meta.json", meta)
-        except Exception as exc:                      # 回中失败不掩盖原始异常
-            log(f"回起始姿态失败（已忽略）：{exc}")
+
+            if not dry_run and (abs(start_pan - START_PAN_US) > 50 or abs(start_tilt - START_TILT_US) > 50):
+                meta.update(status="refused",
+                            error="起始姿态不是 512.7/2055.7；PCA 可能被清零，请先恢复，未动电机")
+                rr.write_json(folder / "meta.json", meta)
+                raise RuntimeError(
+                    "云台不在交接包初始姿态（当前 pan=%.1f tilt=%.1f，期望 %.1f/%.1f）。"
+                    "PCA 可能被 Hardware(cfg)/菜单6 清零；先用 /tmp/restore_initial_pca.py "
+                    "慢速恢复，本次未动电机。" % (start_pan, start_tilt, START_PAN_US, START_TILT_US))
+
+            if dry_run:
+                meta.update(status="dry_run", completed_at=rr.now(), views_captured=0,
+                            plan={"pan_us": list(PAN_TARGETS_US), "tilt_up_us": TILT_UP_US,
+                                  "return_to": {"pan_us": round(start_pan, 1),
+                                                "tilt_us": round(start_tilt, 1)}})
+                rr.write_json(folder / "meta.json", meta)
+                write_state(config, folder, phase="dry_run", index=0, total=len(PAN_TARGETS_US),
+                            message="干跑：只读起始姿态，未动舵机、未拍图")
+                log(f"干跑：起始 pan={start_pan:.1f}µs tilt={start_tilt:.1f}µs；"
+                    f"计划 pan={list(PAN_TARGETS_US)} tilt_up={TILT_UP_US}µs")
+                return folder
+
+            target_pan = [clamp_us(value, PAN_MIN_US, PAN_MAX_US) for value in PAN_TARGETS_US]
+            target_tilt_up = clamp_us(TILT_UP_US, TILT_MIN_US, TILT_MAX_US)
+
+            try:
+                if cue:
+                    rr.announce(config, "start", meta["events"])
+                started = time.perf_counter()
+
+                _ramp(pulse, TILT_CHANNEL, target_tilt_up, timing.move_s, timing.steps,
+                      timing.settle_s, sleep, "上移", log)
+
+                for index, target in enumerate(target_pan, start=1):
+                    ident = "view_%02d" % index
+                    _ramp(pulse, PAN_CHANNEL, target, timing.move_s, timing.steps,
+                          timing.settle_s, sleep, ident, log)
+                    rr.write_json(folder / "meta.json", meta)
+                    write_state(config, folder, phase="capturing", index=index,
+                                total=len(target_pan), message=f"第 {index}/{len(target_pan)} 个角度，准备拍照")
+                    hold_start = time.perf_counter()
+                    pan_us = pulse.read_us(PAN_CHANNEL)
+                    tilt_us = pulse.read_us(TILT_CHANNEL)
+                    raw = originals / (ident + "_raw.jpg")
+                    target_file = originals / (ident + ".jpg")
+                    captured = capture(raw, folder / (ident + "_capture.log"))
+                    _rotate_image(raw, target_file, int(rotate_deg))
+                    remain = timing.hold_s - (time.perf_counter() - hold_start)
+                    if remain > 0:
+                        sleep(remain)
+                    record = {
+                        "commanded": {
+                            "pan_us": round(pan_us, 1),
+                            "tilt_us": round(tilt_us, 1),
+                            "pan": pan_deg(pan_us),
+                            "tilt": tilt_deg(tilt_us),
+                        },
+                        "measured": None,
+                        "source": "commanded",
+                        "pan_source": "commanded",
+                        "rotation_deg": int(rotate_deg),
+                    }
+                    meta["views"].append({
+                        "view_id": ident,
+                        "file": target_file.relative_to(folder).as_posix(),
+                        "raw_file": raw.relative_to(folder).as_posix(),
+                        "size": captured["size"],
+                        "sha256": hashlib.sha256(target_file.read_bytes()).hexdigest(),
+                        "captured_at": rr.now(),
+                        "seconds": captured["seconds"],
+                        "hold_started_s": round(hold_start - started, 2),
+                        "pose": record,
+                    })
+                    rr.write_json(folder / "meta.json", meta)
+                    write_state(config, folder, phase="capturing", index=index,
+                                total=len(target_pan), photo=target_file.relative_to(folder).as_posix(),
+                                pose=record,
+                                message=f"已拍 {index}/{len(target_pan)} 张，pan={record['commanded']['pan']:.0f}°")
+                    log(f"照片已保存：{target_file}（pan={pan_us:.1f}µs/{record['commanded']['pan']:.1f}°，"
+                        f"tilt={tilt_us:.1f}µs/{record['commanded']['tilt']:.1f}°，"
+                        f"旋转 {rotate_deg}°）")
+            except BaseException as exc:
+                meta.update(status="capture_failed", error=f"{type(exc).__name__}: {exc}")
+                rr.write_json(folder / "meta.json", meta)
+                write_state(config, folder, phase="error", index=len(meta["views"]),
+                            total=len(target_pan), message=f"采集失败：{exc}")
+                raise
+            finally:
+                # 无论成功失败都尽量回起始姿态，并保持力矩（不卸力）。
+                try:
+                    _ramp2(pulse, start_pan, start_tilt, timing.return_s, timing.steps,
+                           timing.settle_s, sleep, log)
+                    meta["gimbal"]["returned"] = {"pan_us": round(pulse.read_us(PAN_CHANNEL), 1),
+                                                  "tilt_us": round(pulse.read_us(TILT_CHANNEL), 1)}
+                    rr.write_json(folder / "meta.json", meta)
+                except Exception as exc:                      # 回中失败不掩盖原始异常
+                    log(f"回起始姿态失败（已忽略）：{exc}")
+
+    finally:
         if owns_pulse:
             try:
                 pulse.close()
-            except Exception:
-                pass
+            except Exception as exc:
+                log(f"关闭 I2C 失败：{exc}")
 
     captured_views = len(meta["views"])
     elapsed = round(time.perf_counter() - started, 3)

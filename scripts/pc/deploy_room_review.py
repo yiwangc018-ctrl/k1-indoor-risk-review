@@ -22,7 +22,8 @@ def main():
                     mkdir(posixpath.dirname(path))
                     sftp.mkdir(path)
 
-            files = ["app/room_review.py", "app/photo_pipeline.py", "app/gimbal_scan.py",
+            files = ["app/asr_client.py", "app/asr_sensevoice.py", "scripts/board/asr_service.py",
+                     "app/room_review.py", "app/photo_pipeline.py", "app/gimbal_scan.py",
                      "app/gimbal_flow30.py", "app/buyer_report.py", "app/polish_packet.py",
                      "scripts/board/start_room_review.sh", "scripts/board/room_review_gui.sh",
                      "scripts/board/RoomReview.desktop", "scripts/board/RoomReviewMenu.desktop",
