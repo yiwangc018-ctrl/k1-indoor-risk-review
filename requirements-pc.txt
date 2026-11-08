@@ -1,0 +1,7 @@
+# PC 侧依赖（Windows / Linux）
+# 安装：python -m pip install -r requirements-pc.txt
+# 用途：SSH/SCP 部署与同步、买家版报告内嵌图片、部分单测
+
+paramiko>=3.0
+Pillow>=10.0
+numpy>=1.24

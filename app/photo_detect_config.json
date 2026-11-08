@@ -1,0 +1,14 @@
+{
+  "model": "/home/biandu/k1demo/models/yolov8n.q.onnx",
+  "confidence": 0.25,
+  "iou": 0.45,
+  "threads": 4,
+  "max_crops": 2,
+  "crop_padding": 0.15,
+  "quality": {},
+  "vlm_url": "http://127.0.0.1:8093/v1/chat/completions",
+  "vlm_model": "qwen3.5-0.8b",
+  "vlm_timeout": 180,
+  "vlm_max_tokens": 96,
+  "vlm_prompt": "用简短中文描述图片中直接可见的物体和位置。看不清就说无法确认。不要推测危险等级、尺寸、材质、物体是否缺失，也不要给出安全结论。"
+}

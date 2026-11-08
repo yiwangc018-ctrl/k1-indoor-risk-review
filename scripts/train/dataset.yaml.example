@@ -1,0 +1,31 @@
+# YOLO 检测数据集配置示例（只含推荐的 3 类检测主线）
+#
+# 用法：
+#   1. 复制为数据集目录下的 dataset.yaml，例如
+#        data/dataset_example/dataset.yaml
+#   2. path 相对于该 dataset.yaml 所在目录；确认 images/labels 按 split 对齐。
+#   3. 训练前先运行：
+#        python scripts/train/check_dataset.py --dataset <数据集根目录>
+#
+# 注意：类名和顺序就是 class id，必须与 labels/*.txt 的第一列一致。
+# 本示例不包含扶手存在性、照明不足等非 bbox 任务。
+
+path: .
+train: images/train
+val: images/val
+test: images/test
+
+nc: 3
+names:
+  0: door_threshold   # 门槛 / 高差
+  1: carpet_cable     # 地毯、垫子、线缆等地面绊倒物（示例合并类名）
+  2: clutter          # 通道杂物
+
+# 以下两项不要写进 names，也不要为它们生成 bbox：
+#
+# * 扶手缺失：属于“有/无/不确定”的 ROI 二分类，不是 YOLO 检测框；
+#   应走单独的 labels_cls/ 或清单字段，并在规则层判定“缺失”。
+# * 照明不足：属于传统 CV（亮度/低照度占比）+ 规则，不是物体框；
+#   应记录在光照指标/质量门禁里，不进入检测标签。
+#
+# 把“缺失”画成一个 bbox 会让模型学到错误目标；本示例刻意不提供这两类。

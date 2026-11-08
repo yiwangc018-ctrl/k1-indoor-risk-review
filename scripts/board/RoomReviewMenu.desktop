@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=分步菜单
+Comment=单张/手动四张/语音测试/云台旧入口
+Exec=qterminal -e /home/biandu/rv/room_review/scripts/board/room_review_gui.sh
+Path=/home/biandu/rv/room_review
+Terminal=false
+Icon=utilities-terminal
+Categories=Utility;

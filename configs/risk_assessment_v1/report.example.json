@@ -1,0 +1,41 @@
+{
+  "task_version": "risk_degree_v1",
+  "source": "manual_design_example_not_2b_inference_or_gold_label",
+  "status": "example_only",
+  "overall": {
+    "level": "medium",
+    "meaning": "本轮可见区域的处理关注程度，不是事故概率或每处均同等危险",
+    "summary": "中央可见通道较空，部分工位和收纳区值得优先整理"
+  },
+  "coverage": {
+    "input_views": 4,
+    "assessed_views": 4,
+    "unassessed_views": [],
+    "note": "这里的完成数量仅用于展示报告格式，不表示已经实际运行；四图不等于全屋或360度覆盖"
+  },
+  "priority_regions": [
+    {
+      "rank": 1,
+      "kind": "movement",
+      "level": "medium",
+      "where": "前排工位外侧地面",
+      "view_ids": ["IMG_4472", "IMG_4473", "IMG_4474"],
+      "basis": "物品和连接线靠近起身、经过的位置，局部活动空间偏拥挤",
+      "action": "先整理工位外侧，给起身和经过留出空间"
+    },
+    {
+      "rank": 2,
+      "kind": "movement",
+      "level": "medium",
+      "where": "收纳架前与旁侧",
+      "view_ids": ["IMG_4473", "IMG_4474"],
+      "basis": "箱包和物品占用部分架前、旁侧取放空间",
+      "action": "集中收纳地面物品，保留取物位置"
+    }
+  ],
+  "notes": [
+    "架顶箱体数量不单独决定高等级；未看到明显歪斜不表示已证明稳定",
+    "插排和正常实验接线不作为本例主要关注项",
+    "不得将本例等级、理由或优先区域输入模型以强制它复述"
+  ]
+}

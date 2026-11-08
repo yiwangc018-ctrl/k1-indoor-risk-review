@@ -1,0 +1,51 @@
+# =============================================================================
+# config.yaml —— 小屏 × 本地大模型的唯一配置源
+#
+# 原则（参赛指南 §5.2）：引脚、总线号、模型地址、超时、提示词，全部只在这里改。
+# 代码里不出现魔法数字。
+#
+# 改完的验证顺序：先 python3 display.py --selftest，再 python3 ask.py --mock "输出数字123"
+# 最后 python3 ask.py "输出数字123"
+# =============================================================================
+
+display:
+  # auto: 自动扫 i2c-4 / i2c-3 找 0x3C/0x3D（推荐，省得猜总线号）
+  # ssd1306: 0.96" 128x64（最常见）| sh1106: 1.3" 128x64（显示偏 2 像素就是它）
+  # mock: 不碰硬件，把帧缓冲打成字符画，用于 PC 上验证
+  # none: 完全关闭显示，只走终端
+  driver: auto
+  panel: ssd1306    # auto 命中后用哪套初始化序列（偏向 sh1106 就改成 sh1106）
+  buses: [4, 3]     # auto 依次尝试 /dev/i2c-4、/dev/i2c-3
+  bus: 4            # driver 写死 ssd1306/sh1106 时才用这一项
+  address: 0x3C     # i2cdetect 读到的地址，常见 0x3C / 0x3D
+  rotate: 0         # 0 或 180：屏装反了改这里，不用拆线
+  contrast: 207     # 0-255；户外/强光下可拉高
+  font: ""          # 空 = 自动找（DroidSansFallback / Noto CJK），也可写绝对路径
+  sizes: [24, 20, 16, 12]   # 文本模式自动选"放得下且最大"的字号（px）
+
+llm:
+  # llamacpp: llama-server 原生 /completion（**支持 grammar，推荐**）
+  # ollama:   /api/chat（省事，但没有解码约束；本板已装 0.6.8+spacemit 与 qwen2.5:0.5b）
+  # openai:   /v1/chat/completions（给只敢暴露标准接口的服务用）
+  # mock:     本地假回答，用来在没有模型时验证链路
+  backend: ollama
+  url: http://127.0.0.1:11434
+  model: qwen2.5:0.5b
+  temperature: 0.0          # 必须 0：这个任务不需要创造力
+  max_tokens: 8             # 3 位数字 = 4 token 左右，卡死上限就卡死延迟
+  timeout: 20.0             # 秒；ollama 冷启动要加载模型，第一次会慢，别用 3 秒
+
+  # 契约层：把"概率输出"收窄成"确定值"的第一道闸
+  use_grammar: true
+  grammar: "root ::= [0-9]{1,5}"     # GBNF：只允许 1~5 位数字（仅 digits 模式有意义）
+
+  system: >-
+    你是数字提取器。只输出阿拉伯数字，不要解释、不要标点、不要单位、不要换行。
+  stop: ["<|im_end|>", "\n"]
+
+app:
+  # text   —— 显示模型给出的任意短文字（支持中文，默认）
+  # digits —— 只接受 1~5 位数字（做"数字屏"演示时用）
+  mode: digits
+  max_chars: 32                     # 超过就截断，屏幕最多 4 行 × 8 字
+  log: results/llm_display.jsonl    # 每次调用一行：输入/原始输出/解析结果/耗时

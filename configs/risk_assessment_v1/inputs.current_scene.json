@@ -1,0 +1,18 @@
+{
+  "scene_id": "real_room_20261103_01",
+  "input_source": "phone_photos_simulating_gimbal_views",
+  "scene_hint": "室内工作与收纳空间，关注日常行走、起身、操作和取物附近的摆放",
+  "note": "No expected grade, manual priority or reference answer is included in the model input. These four views are one scene. Region groups below are coarse display/grouping hints, not precise geometry.",
+  "views": [
+    {"view_id": "IMG_4471", "source_path": "C:/Users/jim chen/Downloads/IMG_4471.jpeg", "view_hint": "储物角与桌柜附近", "pose": null},
+    {"view_id": "IMG_4472", "source_path": "C:/Users/jim chen/Downloads/IMG_4472.jpeg", "view_hint": "中央通道与前排工位", "pose": null},
+    {"view_id": "IMG_4473", "source_path": "C:/Users/jim chen/Downloads/IMG_4473.jpeg", "view_hint": "工位与后侧收纳区域", "pose": null},
+    {"view_id": "IMG_4474", "source_path": "C:/Users/jim chen/Downloads/IMG_4474.jpeg", "view_hint": "工位与架前的重叠视角", "pose": null}
+  ],
+  "region_groups": [
+    {"region_id": "storage_corner", "name": "左侧储物角", "view_ids": ["IMG_4471"]},
+    {"region_id": "visible_aisle", "name": "中央可见通道", "view_ids": ["IMG_4472", "IMG_4473"]},
+    {"region_id": "front_workstations", "name": "前排工位周边", "view_ids": ["IMG_4472", "IMG_4473", "IMG_4474"]},
+    {"region_id": "rear_storage", "name": "后侧收纳与架前", "view_ids": ["IMG_4473", "IMG_4474"]}
+  ]
+}

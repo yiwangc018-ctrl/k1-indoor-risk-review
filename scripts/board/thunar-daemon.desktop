@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Thunar 文件管理器服务
+Comment=保证 XFCE 桌面能启动 .desktop 图标
+Exec=thunar --daemon
+OnlyShowIn=XFCE;
+NoDisplay=true

@@ -1,0 +1,67 @@
+{
+  "task_version": "risk_degree_v1",
+  "inputs_manifest": "inputs.current_scene.json",
+  "implementation_status": "design_not_deployed",
+  "purpose": "Approximate visible-area risk degree and handling priority, not accident probability",
+  "connection": {"host": "192.168.137.240", "user": "biandu"},
+  "model": {
+    "name": "Qwen3.5-2B",
+    "vision_input_size": 384,
+    "context_size": 2048,
+    "threads": 4,
+    "binary": "/home/biandu/rv/validation_20261103/runtime_archives/spacemit-llama.cpp.riscv64.0.1.7/bin/llama-server",
+    "model_config": "/home/biandu/rv/validation_20261103/domain/q2_selected_relations/config.json",
+    "env": {
+      "LD_LIBRARY_PATH": "/home/biandu/rv/validation_20261103/runtime_archives/spacemit-llama.cpp.riscv64.0.1.7/lib:/home/biandu/rv/validation_20261103/runtime_archives/spacemit-ort.riscv64.2.0.6/lib"
+    },
+    "temperature": 0,
+    "cache_prompt": false,
+    "max_tokens": 128,
+    "request_timeout_seconds": 100,
+    "verify_model_identity_before_reuse": true
+  },
+  "capture": {
+    "horizontal_views": 4,
+    "extra_pitch_views_max": 2,
+    "total_views_max": 6,
+    "plan_before_inference": true,
+    "automatic_semantic_recapture": false
+  },
+  "inference": {
+    "calls_per_usable_view": 1,
+    "max_calls": 6,
+    "max_focus_per_view": 1,
+    "automatic_roi_calls": 0,
+    "automatic_retries": 0,
+    "wall_budget_seconds": {"4": 300, "5": 360, "6": 420},
+    "budget_status": "initial_engineering_budget_not_measured_new_task_latency"
+  },
+  "quality": {
+    "policy": "coarse_assessment_with_advisory_metrics",
+    "hard_failure_examples": ["decode_error", "empty_image"],
+    "advisory_metrics": ["gradient_variance", "recommended_resolution", "mean_brightness", "overexposed_ratio"],
+    "unknown_hidden_physics_blocks_grading": false
+  },
+  "detector": {
+    "model": "/home/biandu/k1demo/models/yolov8n.q.onnx",
+    "reuse_one_session_per_round": true,
+    "release_process_before_vlm": true,
+    "required_for_vlm_assessment": false,
+    "max_context_candidates_per_view": 5
+  },
+  "report": {
+    "levels": ["low", "medium", "high"],
+    "overall_aggregation": "max_of_assessed_view_levels",
+    "overall_scope": "highest_handling_priority_within_assessed_visible_areas",
+    "max_priority_regions": 3,
+    "duplicate_count_increases_level": false,
+    "incomplete_coverage_kept_separate": true,
+    "all_failed_level": "not_assessed",
+    "second_text_model_required": false
+  },
+  "prompt_files": {
+    "system": "system_prompt.zh.txt",
+    "view": "view_prompt.zh.txt",
+    "response_schema": "view_response.schema.json"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "scope": "design_assets_only_not_board_inference",
+  "json_files": 4,
+  "json_schema_and_view_examples_validated": true,
+  "input_files_exist": 4,
+  "local_document_links_checked": 102,
+  "missing_links": 0,
+  "active_app_configuration_changed": false,
+  "new_risk_task_run": false
+}

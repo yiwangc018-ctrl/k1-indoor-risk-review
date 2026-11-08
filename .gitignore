@@ -1,0 +1,80 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# ---- 大体积二进制 / 压缩包（不入公开仓库）----
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.pptx
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.gguf
+*.mp4
+*.avi
+*.mov
+
+# ---- 参考素材中的大件（只保留文本资料）----
+ref/cases/
+ref/img_login/
+ref/img_submit/
+ref/spacemit_docs/
+
+# ---- 嵌套仓库（避免变成 submodule gitlink）----
+ref/cases/voice-control-servo/
+
+# ---- Office 临时锁文件 ----
+~$*
+.DS_Store
+Thumbs.db
+
+# ---- 运行产物 / 日志 ----
+*.log
+
+# ---- 新板恢复：离线模型缓存与打包产物（1.4GB 级，不入库）----
+.cache/
+dist/
+
+# ---- 根目录临时脚本 / 板端联调草稿（联调中保留，不入库）----
+.tmp_*
+
+
+# ---- 嵌套的厂商相机仓库（35MB，gitee k1x-cam，不作为子模块）----
+k1x-cam/
+
+# 早期误提交的 whisper 权重（>100MB，GitHub 拒收；已从历史移除）
+results/room_review_20261104/asr_downloads/
+# 本地 QA 截图
+results/qa_*.png
+results/contact_sheet_*.jpg
+
+# 提交材料只本地打包/上传，不随公开仓库发布
+提交材料/
+
+# ---- 现场原图：可能含可识别人脸，禁止进入公开仓库 ----
+# 保留 results/ 下的文本证据（summary.json / meta.json / analysis.json / report.md 等）；
+# 图片与 originals/ 一律拦截。确需发布某张纯设备图时用 `git add -f <path>` 显式豁免。
+# 覆盖：results/newboard_20261108/、results/newboard_accept_20261108_*/、
+#       results/room_review_20261108/、results/risk_degree/*、results/gimbal_probe_*、results/vnc_*
+results/**/originals/
+results/**/*.jpg
+results/**/*.jpeg
+results/**/*.png
+results/**/*.bmp
+results/**/*.webp
+results/**/*.heic
+# 板端 / 买家版 HTML 内嵌 base64 现场照片，同样不发布（文本证据看同目录 report.md）
+results/**/report.html
+
+# ---- 编辑器本地配置 ----
+.vscode/

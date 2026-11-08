@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=室内风险初评
+Comment=语音提示→嘀一次→云台30秒四角度→拍照→分析（完整检查）
+Exec=qterminal -e /home/biandu/rv/room_review/scripts/board/voice_gimbal30.sh
+Path=/home/biandu/rv/room_review
+Terminal=false
+Icon=camera-photo
+Categories=Utility;

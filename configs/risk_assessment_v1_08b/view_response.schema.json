@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Risk degree view response v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "level",
+    "reason"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "assessed",
+        "unassessable"
+      ]
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "not_assessed"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "focus": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "where",
+          "basis"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "movement",
+              "placement",
+              "collision"
+            ]
+          },
+          "where": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Design schema, not a claim of verified runtime support. Program must additionally enforce assessed=>low/medium/high and unassessable=>not_assessed with empty focus. Optional focus must not make an otherwise valid coarse level unusable."
+}

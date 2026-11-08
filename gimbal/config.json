@@ -1,0 +1,113 @@
+{
+  "_note": "pan 方位角单位度，0=基准方向；tilt 俯仰角，抬头为正、低头为负。min_servo_deg/max_servo_deg 是舵机自身刻度上的软限位，留 2~3° 余量避免顶机械限位。",
+  "i2c": {
+    "bus": 4,
+    "mpu_bus": 3,
+    "bus_candidates": [
+      4,
+      3,
+      1,
+      0,
+      2,
+      5
+    ],
+    "backend": "pca9685",
+    "pca9685_addr": 64,
+    "mpu6050_addr": 104,
+    "pwm_chip": 0
+  },
+  "servos": {
+    "pan": {
+      "channel": 15,
+      "travel_deg": 270.0,
+      "min_servo_deg": 2.0,
+      "max_servo_deg": 267.0,
+      "zero_deg": 0.0,
+      "invert": false,
+      "min_us": 500.0,
+      "max_us": 2500.0,
+      "trim_us": 0.0,
+      "speed_dps": 90.0,
+      "accel_dps2": 300.0
+    },
+    "tilt": {
+      "channel": 11,
+      "travel_deg": 270.0,
+      "min_servo_deg": 35.0,
+      "max_servo_deg": 235.0,
+      "zero_deg": 135.0,
+      "invert": false,
+      "min_us": 500.0,
+      "max_us": 2500.0,
+      "trim_us": 0.0,
+      "speed_dps": 60.0,
+      "accel_dps2": 200.0
+    }
+  },
+  "mount": {
+    "pitch_sign": 1.0,
+    "roll_sign": 1.0,
+    "pitch_offset_deg": 0.0,
+    "alpha": 0.98,
+    "gyro_axis": "y"
+  },
+  "control": {
+    "loop_hz": 100,
+    "settle_ms": 300,
+    "tilt_kp": 0.35,
+    "tilt_ki": 0.0,
+    "tilt_deadband_deg": 0.3,
+    "tilt_step_max_deg": 2.0,
+    "tilt_timeout_s": 8.0,
+    "tilt_iter_s": 0.25
+  },
+  "safety": {
+    "level_max_deg": 0.5,
+    "require_mpu": false
+  },
+  "presets": {
+    "pan": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ],
+    "tilt": [
+      0.0,
+      -30.0,
+      -45.0,
+      -60.0
+    ],
+    "home": [
+      0.0,
+      0.0
+    ]
+  },
+  "scan": {
+    "default_mode": "quick",
+    "modes": {
+      "quick": {
+        "label": "快速四张",
+        "tilt": -30.0,
+        "azimuths": 4,
+        "use_presets": true
+      },
+      "full": {
+        "label": "三环全向",
+        "rings_tilt": [
+          -35.0,
+          0.0,
+          25.0
+        ],
+        "azimuths": 4,
+        "use_presets": true
+      }
+    },
+    "azimuths": 4,
+    "hfov_deg": 110.0,
+    "sensor_aspect": 1.7778,
+    "settle_ms": 300,
+    "tilt_closed_loop": false,
+    "cam_height_m": 1.4
+  }
+}
